@@ -19,7 +19,7 @@ kubectl get pod
 Run port-forward
 
 ```
-kubectl port-forward rs/hello-kube 3000:3000
+kubectl port-forward rs/hello-rs 3000:3000
 ```
 
 Run delete
