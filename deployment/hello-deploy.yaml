@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment # change here
+metadata:
+  name: hello-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-app
+  template:
+    metadata:
+      labels:
+        app: hello-app
+    spec:
+      containers:
+      - image: 080196/hello-app:v1
+        name: hello-app
+        ports:
+          - containerPort: 3000
