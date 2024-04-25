@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-init
+spec:
+  completions: 1
+  template:
+    metadata:
+      labels:
+        app: run
+    spec:
+      containers:
+        - image: 080196/crawler-app-migrate
+          name: migrate-init
+          command:
+          - "/app/run"
+          - "init"
+          env:
+            - name: POSTGRES_DNS
+              value: "" # postgres://crawler:200lab@<update-here>:5432/crawler?sslmode=disable

@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: random-generator
+spec:
+  completions: 1
+  template:
+    metadata:
+      labels:
+        app: run
+    spec:
+      containers:
+        - image: k8spatterns/random-generator:1.0
+          name: random-generator
+          command: [ "java", "-cp", "/", "RandomRunner", "/numbers.txt", "10000" ]

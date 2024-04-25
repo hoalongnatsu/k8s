@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: random-generator
+spec:
+  schedule: "*/3 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: run
+        spec:
+          containers:
+            - image: k8spatterns/random-generator:1.0
+              name: random-generator
+              command: [ "java", "-cp", "/", "RandomRunner", "/numbers.txt", "10000" ]
