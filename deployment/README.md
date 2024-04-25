@@ -7,7 +7,7 @@ docker build . -t 080196/hello-kube:v1
 Push image
 
 ```
-docker push 080196/hello-kube
+docker push 080196/hello-kube:v1
 ```
 
 Run apply
