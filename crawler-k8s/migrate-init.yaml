@@ -9,6 +9,7 @@ spec:
       labels:
         app: run
     spec:
+      restartPolicy: OnFailure
       containers:
         - image: 080196/crawler-app-migrate
           name: migrate-init
@@ -17,4 +18,4 @@ spec:
           - "init"
           env:
             - name: POSTGRES_DNS
-              value: "" # postgres://crawler:200lab@<update-here>:5432/crawler?sslmode=disable
+              value: postgres://crawler:200lab@postgres-0.postgres-headless:5432/crawler?sslmode=disable

@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+spec:
+  completions: 1
+  template:
+    metadata:
+      labels:
+        app: run
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - image: 080196/crawler-app-migrate
+          name: migrate
+          command:
+          - "/app/run"
+          - "migrate"
+          env:
+            - name: POSTGRES_DNS
+              value: postgres://crawler:200lab@postgres-0.postgres-headless:5432/crawler?sslmode=disable

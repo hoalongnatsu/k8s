@@ -19,7 +19,7 @@ spec:
     matchLabels:
       app: postgres
   serviceName: "postgres-headless"
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
