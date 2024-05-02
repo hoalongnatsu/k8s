@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-connect
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-connect
+  template:
+    metadata:
+      labels:
+        app: kafka-connect
+    spec:
+      containers:
+      - name: kafka-connect
+        image: confluentinc/cp-kafka-connect:7.5.3
+        command:
+          - bash
+          - -c
+          - |
+            echo "Installing Connector"
+            confluent-hub install --no-prompt debezium/debezium-connector-postgresql:2.2.1
+            confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:14.0.12
+            #
+            echo "Launching Kafka Connect"
+            /etc/confluent/docker/run
+        ports:
+          - containerPort: 8083
+        envFrom:
+        - configMapRef:
+            name: kafka-connect-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-connect
+spec:
+  selector:
+    app: kafka-connect
+  ports:
+    - protocol: TCP
+      port: 8083
