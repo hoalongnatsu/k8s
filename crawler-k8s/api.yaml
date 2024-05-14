@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - image: 080196/crawler-api
+        name: api
+        env:
+          - name: ELASTICSEARCH_DNS
+            value: http://elasticsearch:9200
+          - name: POSTGRES_DNS
+            value: postgres://crawler:200lab@postgres-0.postgres-headless:5432/crawler?sslmode=disable
