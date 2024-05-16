@@ -1,0 +1,45 @@
+# helm repo add fluent https://fluent.github.io/helm-charts
+# helm -n logging install -f fluent-values.yaml fluent-bit fluent/fluent-bit
+
+image:
+  repository: cr.fluentbit.io/fluent/fluent-bit
+  tag: 3.0.3
+
+config:
+  inputs: |
+    [INPUT]
+        Name tail
+        Tag kube.*
+        Path /var/log/containers/*.log
+        multiline.parser docker, cri
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+
+  filters: |
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+
+    [FILTER]
+        Name grep
+        Match kube.*
+        Exclude $kubernetes['namespace_name'] logging
+
+  outputs: |
+    [Output]
+        Match kube.*
+        Name stdout
+
+    [Output]
+        Name es
+        Match kube.*
+        Host  elasticsearch-master-headless
+        Port  9200
+        Index nginx-log
+        Suppress_Type_Name On
+        HTTP_User elastic
+        HTTP_Passwd yvq831sYEDaMZcVe

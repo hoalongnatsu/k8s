@@ -1,0 +1,23 @@
+# helm repo add elastic https://helm.elastic.co
+# helm -n logging install -f elasticsearch-values.yaml elasticsearch elastic/elasticsearch
+
+imageTag: 8.12.0
+
+antiAffinity: "soft"
+
+esJavaOpts: "-Xmx128m -Xms128m"
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512M"
+  limits:
+    cpu: "1000m"
+    memory: "512M"
+
+volumeClaimTemplate:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: "hostpath"
+  resources:
+    requests:
+      storage: 10Gi

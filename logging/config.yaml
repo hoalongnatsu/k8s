@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: logging
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+      # Log_Level
+      # =========
+      # - error
+      # - warning
+      # - info
+      # - debug
+      # - trace
+      # Default 'info' is set, that means it includes 'error' and 'warning'.
+      log_level info
+
+      # Parsers File
+      Parsers_File /fluent-bit/etc/parsers.conf
+
+    [INPUT]
+      Name tail
+      Tag kube.*
+      Path /var/log/containers/*.log
+      multiline.parser docker, cri
+      Mem_Buf_Limit 5MB
+      Skip_Long_Lines On
+
+    [FILTER]
+      Name kubernetes
+      Match kube.*
+      Merge_Log On
+      Keep_Log Off
+      K8S-Logging.Parser On
+      K8S-Logging.Exclude On
+
+    [FILTER]
+      Name grep
+      Match kube.*
+      Exclude $kubernetes['namespace_name'] logging
+
+    [OUTPUT]
+      Match  kube.*
+      Name stdout
+
+    # https://docs.fluentbit.io/manual/pipeline/outputs/elasticsearch
+    [OUTPUT]
+      Name es
+      Match nginx
+      Host  elasticsearch
+      Port  9200
+      Index nginx-log
+      Suppress_Type_Name On
