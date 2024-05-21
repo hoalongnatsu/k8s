@@ -1,8 +1,6 @@
 # helm repo add elastic https://helm.elastic.co
 # helm -n logging install -f elasticsearch-values.yaml elasticsearch elastic/elasticsearch
 
-imageTag: 8.12.0
-
 antiAffinity: "soft"
 
 esJavaOpts: "-Xmx128m -Xms128m"
